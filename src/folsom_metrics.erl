@@ -90,6 +90,10 @@ new_histogram(Name) ->
 
 new_histogram(Name, slide_uniform) ->
     folsom_metrics:new_histogram(Name, slide_uniform, {?DEFAULT_SLIDING_WINDOW, ?DEFAULT_SIZE}, ?DEFAULT_ALPHA);
+
+new_histogram(Name, slide) ->
+    folsom_metrics:new_histogram(Name, slide, ?DEFAULT_SLIDING_WINDOW);
+
 new_histogram(Name, SampleType) ->
     folsom_metrics:new_histogram(Name, SampleType, ?DEFAULT_SIZE, ?DEFAULT_ALPHA).
 
