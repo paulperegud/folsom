@@ -55,7 +55,7 @@ new(Name, SampleType, SampleSize, Alpha) ->
     Hist = #histogram{type = SampleType, sample = Sample},
     ets:insert(?HISTOGRAM_TABLE, {Name, Hist}).
 
-update(Name, Value) ->
+update(Name, Value) when is_number(Value), Value >= 0.0 ->
     Hist = get_value(Name),
     Sample = Hist#histogram.sample,
     case folsom_sample:update(Hist#histogram.type, Hist#histogram.sample, Value) of
@@ -64,7 +64,9 @@ update(Name, Value) ->
             true;
         NewSample ->
             ets:insert(?HISTOGRAM_TABLE, {Name, Hist#histogram{sample = NewSample}})
-    end.
+    end;
+update(Name, Value) ->
+    erlang:error({badarg, only_non_neg_number_allowed}).
 
 % gets the histogram record from ets
 get_value(Name) ->
