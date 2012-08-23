@@ -30,6 +30,7 @@
          create_metrics/0,
          populate_metrics/0,
          check_metrics/0,
+         reset_metrics/0,
          delete_metrics/0,
          vm_metrics/0,
          counter_metric/2,
@@ -83,6 +84,34 @@ create_metrics() ->
     13 = length(folsom_metrics:get_metrics()),
 
     ?debugFmt("~n~nmetrics: ~p~n", [folsom_metrics:get_metrics()]).
+
+reset_metrics() ->
+    ?debugFmt("~nResetting all metrics~n", []),
+    true = folsom_metrics:unsafe_reset(counter),
+    true = folsom_metrics:unsafe_reset(<<"gauge">>),
+
+    true = folsom_metrics:unsafe_reset(<<"uniform">>),
+    true = folsom_metrics:unsafe_reset(<<"hugedata">>),
+    true = folsom_metrics:unsafe_reset(exdec),
+    true = folsom_metrics:unsafe_reset(none),
+
+    true = folsom_metrics:unsafe_reset(nonea),
+
+    true = folsom_metrics:unsafe_reset(timed),
+
+    true = folsom_metrics:unsafe_reset(<<"history">>),
+    ok = folsom_metrics:delete_metric(historya),
+    [{error,historya,nonexistent_metric}] = folsom_metrics:get_metric_info(historya),
+    true = folsom_metrics:unsafe_reset(meter),
+
+    true = folsom_metrics:unsafe_reset(meter_reader),
+
+    true = folsom_metrics:unsafe_reset(duration),
+
+    true = folsom_metrics:unsafe_reset(spiral),
+    ?debugFmt("~nDone resetting metrics~n", []),
+
+    ?debugFmt("~nres ~nmetrics: ~p~n", [folsom_metrics:get_metrics()]).
 
 populate_metrics() ->
     ok = folsom_metrics:notify({counter, {inc, 1}}),

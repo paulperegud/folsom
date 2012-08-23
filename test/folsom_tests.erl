@@ -32,6 +32,7 @@ run_test_() ->
      fun (_) -> folsom:stop() end,
      [{"creating metrics",
        fun folsom_erlang_checks:create_metrics/0},
+      
       {"populating metrics",
        {timeout, 30, fun folsom_erlang_checks:populate_metrics/0}},
       {"checking metrics",
@@ -42,6 +43,17 @@ run_test_() ->
        end},
       {"checking erlang vm metrics",
        fun folsom_erlang_checks:vm_metrics/0},
+
+      {"folsom_metrics:unsafe_reset/1 check",
+       fun folsom_erlang_checks:reset_metrics/0},
+      
+      {"populating metrics",
+       {timeout, 30, fun folsom_erlang_checks:populate_metrics/0}},
+      {"checking metrics",
+       fun folsom_erlang_checks:check_metrics/0},
+      {"checking erlang vm metrics",
+       fun folsom_erlang_checks:vm_metrics/0},
+      
       {"deleting metrics",
        fun folsom_erlang_checks:delete_metrics/0},
       {"cpu topology test",
