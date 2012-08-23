@@ -28,7 +28,8 @@
          update/3,
          get_events/1,
          get_events/2,
-         get_value/1
+         get_value/1,
+         reset/1
         ]).
 
 -include("folsom.hrl").
@@ -81,3 +82,7 @@ get_prev_event(Name, Key, Count, Acc) when length(Acc) < Count ->
     get_prev_event(Name, ets:prev(Name, Key), Count, lists:append(Acc, Event));
 get_prev_event(_, _, _, Acc) ->
     Acc.
+
+reset(Name) ->
+    #history{tid=Tid} = get_value(Name),
+    ets:delete_all_objects(Tid).

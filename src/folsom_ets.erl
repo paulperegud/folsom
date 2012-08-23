@@ -32,6 +32,7 @@
          tag_handler/2,
          untag_handler/2,
          delete_handler/1,
+         reset/1,
          handler_exists/1,
          notify/1,
          notify/2,
@@ -128,6 +129,15 @@ tagged_notify(Name, Event, Type, Tags) ->
 notify_existing_metric(Name, Event, Type) ->
     notify(Name, Event, Type, true).
 
+%% resets metric, if it exists
+reset(Name) ->
+    case get_info(Name) of
+        {Name, [{type, Type}]} ->
+            reset(Name, Type);
+        {error, Name, nonexistent_metric} = Err ->
+            Err
+    end.
+            
 get_handlers() ->
     proplists:get_keys(ets:tab2list(?FOLSOM_TABLE)).
 
@@ -437,3 +447,21 @@ notify(Name, Value, spiral, false) ->
 notify(_, _, Type, _) ->
     {error, Type, unsupported_metric_type}.
 
+reset(Name, counter) ->
+    folsom_metrics_counter:clear(Name);
+reset(Name, gauge) ->
+    folsom_metrics_gauge:clear(Name);
+reset(Name, histogram) ->
+    folsom_metrics_histogram:reset(Name);
+reset(Name, history) ->
+    folsom_metrics_history:reset(Name);
+reset(Name, meter) ->
+    folsom_metrics_meter:reset(Name);
+reset(Name, meter_reader) ->
+    folsom_metrics_meter_reader:reset(Name);
+reset(Name, duration) ->
+    folsom_metrics_duration:reset(Name);
+reset(Name, spiral) ->
+    folsom_metrics_spiral:reset(Name);
+reset(_, Type) ->
+    {error, Type, unsupported_metric_type}.

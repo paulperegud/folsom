@@ -44,6 +44,7 @@
          delete_metric/1,
          tag_metric/2,
          untag_metric/2,
+         unsafe_reset/1,
          notify/1,
          notify/2,
          notify/3,
@@ -141,6 +142,9 @@ untag_metric(Name, Tag) ->
 
 delete_metric(Name) ->
     folsom_ets:delete_handler(Name).
+
+unsafe_reset(Name) ->
+    folsom_ets:reset(Name).
 
 notify(Event) ->
     folsom_ets:notify(Event).

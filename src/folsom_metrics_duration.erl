@@ -34,7 +34,8 @@
 -export([new/1,
          update/2,
          get_value/1,
-         get_values/1
+         get_values/1,
+         reset/1
          ]).
 
 -include("folsom.hrl").
@@ -74,3 +75,6 @@ get_values(Name) ->
     WantedMetrics = application:get_env(folsom, enabled_metrics, ?DEFAULT_METRICS),
     Stats = bear:get_statistics_subset(Values, WantedMetrics),
     [{count, Cnt}, {last, Last} | Stats].
+
+reset(Name) ->
+    new(Name).

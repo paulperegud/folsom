@@ -35,7 +35,8 @@
 -export([
          new/2,
          update/2,
-         get_values/1
+         get_values/1,
+         reset/1
         ]).
 
 -define(HOURSECS, 3600).
@@ -126,3 +127,8 @@ delete_and_rescale(Reservoir, NewStart, OldStart, Alpha) ->
 
 recalc_priority(Priority, Alpha, Start, OldStart) ->
     Priority * math:exp(-Alpha * (Start - OldStart)).
+
+reset(#exdec{reservoir = Reservoir} = Sample) ->
+    ets:delete_all_objects(Reservoir),
+    Now = folsom_utils:now_epoch(),
+    Sample#exdec{start = Now, next = Now + ?HOURSECS, n = 1, seed = now()}.

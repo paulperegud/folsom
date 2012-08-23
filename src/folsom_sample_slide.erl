@@ -29,7 +29,8 @@
          get_values/1,
          moment/0,
          trim/2,
-         resize/2
+         resize/2,
+         reset/1
         ]).
 
 -include("folsom.hrl").
@@ -62,3 +63,9 @@ moment() ->
 trim(Reservoir, Window) ->
     Oldest = moment() - Window,
     ets:select_delete(Reservoir, [{{{'$1','_'},'_'},[{'<', '$1', Oldest}],['true']}]).
+
+reset(#slide{reservoir = Reservoir, server = OldPid} = Sample) ->
+    folsom_sample_slide_server:stop(OldPid),
+    ets:delete_all_objects(Reservoir),
+    Pid = folsom_sample_slide_sup:start_slide_server(?MODULE, Sample#slide.reservoir, Sample#slide.window),
+    Sample#slide{server = Pid}.

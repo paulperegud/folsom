@@ -35,7 +35,8 @@
 -export([
          new/1,
          update/2,
-         get_values/1
+         get_values/1,
+         reset/1
         ]).
 
 -include("folsom.hrl").
@@ -61,3 +62,7 @@ maybe_update(Rnd, Size, Value, Reservoir) when Rnd < Size ->
     ets:insert(Reservoir, {Rnd, Value});
 maybe_update(_Rnd, _Size, _Value, _Reservoir) ->
     ok.
+
+reset(#uniform{reservoir = Reservoir, size = Size, n = N, seed = Seed} = Sample) ->
+    ets:delete_all_objects(Reservoir),
+    Sample#uniform{n = 0}.

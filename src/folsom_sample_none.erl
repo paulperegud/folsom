@@ -28,7 +28,8 @@
 -export([
          new/1,
          update/2,
-         get_values/1
+         get_values/1,
+         reset/1
         ]).
 
 -include("folsom.hrl").
@@ -47,3 +48,8 @@ update(#none{reservoir = Reservoir, n = N} = Sample, Value) ->
 get_values(#none{reservoir = Reservoir}) ->
     {_, Values} = lists:unzip(ets:tab2list(Reservoir)),
     Values.
+
+reset(#none{reservoir = Reservoir} = Sample) ->
+    ets:delete_all_objects(Reservoir),
+    Sample#none{n = 0}.
+    
