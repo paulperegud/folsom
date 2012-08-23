@@ -34,7 +34,8 @@
 -export([new/1,
          update/2,
          get_value/1,
-         get_values/1
+         get_values/1,
+         reset/1
          ]).
 
 -include("folsom.hrl").
@@ -73,3 +74,6 @@ get_values(Name) ->
     {Name, Cnt, _Start, Last} = get_value(Name),
     Stats = bear:get_statistics(Values),
     [{count, Cnt}, {last, Last} | Stats].
+
+reset(Name) ->
+    new(Name).

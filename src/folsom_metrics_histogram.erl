@@ -30,7 +30,8 @@
          new/4,
          update/2,
          get_value/1,
-         get_values/1
+         get_values/1,
+         reset/1
          ]).
 
 -include("folsom.hrl").
@@ -71,3 +72,8 @@ get_value(Name) ->
 get_values(Name) ->
     Hist = get_value(Name),
     folsom_sample:get_values(Hist#histogram.type, Hist#histogram.sample).
+
+reset(Name) ->
+    Hist = get_value(Name),
+    NewSample = folsom_sample:reset(Hist#histogram.type, Hist#histogram.sample),
+    ets:insert(?HISTOGRAM_TABLE, {Name, Hist#histogram{sample = NewSample}}).    

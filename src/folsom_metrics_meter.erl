@@ -29,7 +29,8 @@
          mark/1,
          mark/2,
          get_values/1,
-         get_acceleration/1
+         get_acceleration/1,
+         reset/1
         ]).
 
 
@@ -140,3 +141,5 @@ get_rate(Value1, Value2, Interval) ->
     Delta = Value1 - Value2,
     Delta / Interval.
 
+reset(Name) ->
+    new(Name).

@@ -41,6 +41,7 @@
          new_duration/4,
          new_spiral/1,
          delete_metric/1,
+         unsafe_reset/1,
          notify/1,
          notify/2,
          notify/3,
@@ -115,6 +116,9 @@ new_spiral(Name) ->
 
 delete_metric(Name) ->
     folsom_ets:delete_handler(Name).
+
+unsafe_reset(Name) ->
+    folsom_ets:reset(Name).
 
 notify(Event) ->
     folsom_ets:notify(Event).

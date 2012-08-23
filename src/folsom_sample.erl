@@ -29,7 +29,8 @@
          new/2,
          new/3,
          update/3,
-         get_values/2
+         get_values/2,
+         reset/2
         ]).
 
 -include("folsom.hrl").
@@ -79,3 +80,14 @@ get_values(slide, Sample) ->
     folsom_sample_slide:get_values(Sample);
 get_values(slide_uniform, Sample) ->
     folsom_sample_slide_uniform:get_values(Sample).
+
+reset(uniform, Sample) ->
+    folsom_sample_uniform:reset(Sample);
+reset(none, Sample) ->
+    folsom_sample_none:reset(Sample);
+reset(exdec, Sample) ->
+    folsom_sample_exdec:reset(Sample);
+reset(slide, Sample) ->
+    folsom_sample_slide:reset(Sample);
+reset(slide_uniform, Sample) ->
+    folsom_sample_slide_uniform:reset(Sample).

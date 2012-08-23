@@ -29,7 +29,8 @@
          update/2,
          trim/2,
          get_value/1,
-         get_values/1
+         get_values/1,
+         reset/1
         ]).
 
 %% size of the window in seconds
@@ -71,4 +72,13 @@ get_values(Name) ->
 oldest() ->
     folsom_utils:now_epoch() - ?WINDOW.
 
-
+reset(Name) ->
+    Spiral = get_value(Name),
+    ets:delete_all_objects(Spiral#spiral.tid),
+    ets:insert(Spiral#spiral.tid, {count, 0}),
+    folsom_sample_slide_server:stop(Spiral#spiral.server),
+    Pid = folsom_sample_slide_sup:start_slide_server(?MODULE,
+                                                           Spiral#spiral.tid,
+                                                           ?WINDOW),
+    ets:insert(?SPIRAL_TABLE, {Name, Spiral#spiral{server=Pid}}).
+    

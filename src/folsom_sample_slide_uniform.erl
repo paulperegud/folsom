@@ -28,7 +28,8 @@
          update/2,
          get_values/1,
          moment/0,
-         trim/2
+         trim/2,
+         reset/1
         ]).
 
 -include("folsom.hrl").
@@ -70,3 +71,9 @@ trim(Reservoir, Window) ->
     ets:select_delete(Reservoir, [{{{'$1', '_'},'_'},[{'<', '$1', Oldest}],['true']}]),
     %% and trim the counters
     ets:select_delete(Reservoir, [{{'$1','_'},[{is_integer, '$1'}, {'<', '$1', Oldest}],['true']}]).
+
+reset(#slide_uniform{reservoir = Reservoir, size = Size, seed = Seed, server = OldPid} = Sample) ->
+    folsom_sample_slide_server:stop(OldPid),
+    ets:delete_all_objects(Reservoir),
+    Pid = folsom_sample_slide_sup:start_slide_server(?MODULE, Sample#slide_uniform.reservoir, Sample#slide_uniform.window),
+    Sample#slide_uniform{server=Pid}.
