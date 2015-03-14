@@ -77,7 +77,7 @@ trim(Reservoir, Window) ->
     %% and trim the counters
     ets:select_delete(Reservoir, [{{'$1','_'},[{is_integer, '$1'}, {'<', '$1', Oldest}],['true']}]).
 
-reset(#slide_uniform{reservoir = Reservoir, size = Size, seed = Seed, server = OldPid} = Sample) ->
+reset(#slide_uniform{reservoir = Reservoir, server = OldPid} = Sample) ->
     folsom_sample_slide_server:stop(OldPid),
     ets:delete_all_objects(Reservoir),
     Pid = folsom_sample_slide_sup:start_slide_server(?MODULE, Sample#slide_uniform.reservoir, Sample#slide_uniform.window),

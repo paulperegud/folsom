@@ -66,7 +66,7 @@ update(Name, Value) when is_number(Value), Value >= 0.0 ->
         NewSample ->
             ets:insert(?HISTOGRAM_TABLE, {Name, Hist#histogram{sample = NewSample}})
     end;
-update(Name, Value) ->
+update(_Name, _Value) ->
     erlang:error({badarg, only_non_neg_number_allowed}).
 
 % gets the histogram record from ets

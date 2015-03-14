@@ -63,6 +63,6 @@ maybe_update(Rnd, Size, Value, Reservoir) when Rnd < Size ->
 maybe_update(_Rnd, _Size, _Value, _Reservoir) ->
     ok.
 
-reset(#uniform{reservoir = Reservoir, size = Size, n = N, seed = Seed} = Sample) ->
+reset(#uniform{reservoir = Reservoir} = Sample) ->
     ets:delete_all_objects(Reservoir),
     Sample#uniform{n = 0}.
